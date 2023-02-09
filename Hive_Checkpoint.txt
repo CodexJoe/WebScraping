@@ -1,0 +1,40 @@
+### Hive Syntax For checkpoint
+1. Create table if not exits Book(id INT, title STRING, publishDate STRING)
+
+2. Load data local inpath 'file /checkpoint/books/books.txt' overwrite into table Book;
+
+3. Select * Book where id = 2;
+
+4. Create table if not exist Sales ( is INT, buyer STRING, purchaseDate STRING)
+
+5. Select * from Sales limit 5;
+
+6. Create table if not exists book_sales ( id INT, title  STRING, buyer STRING, purchaseDate STRING );
+
+7. insert into book_sale ( select * from Book inner join Sales on Book.id = Sales.id);
+
+8. Select * from book_sales limit 10;
+
+9. drop table if exists book;
+   drop table if exists book_sale;
+   drop table if exists Sales; 
+
+
+### Pig syntax for checkpoint
+
+1. hdfs dfs -put /home/Hadoop/Pig/Pig_Data/artist.json dfs://localhost:9000/pig_data/
+   hdfs dfs -put /home/Hadoop/Pig/Pig_Data/movies.json dfs://localhost:9000/pig_data/
+
+2. artist = LOAD "hdfs://localhost:9000/pig_data/artist.json" using JsonLoader as (id: INT, artist_name: chararray, role: chararray, movieid: INT, Description: chararray);
+   movie = LOAD "hdfs://localhost:9000/pig_data/movie.json" using JsonLoader as (id: INT, movie_name: chararray, movie_year: Date, movie_Category: chararray, Director: chararray);
+
+3. movie_by_year = ORDER movies BY year
+   movie_select = foreach movie_by_year generate movie_name, year;
+
+4. American_movies = Filter movies by category == 'America';
+   Directors_List = foreach american_movies generate director;
+
+5. triplets = foreach movie generate movieid, id, role;
+
+6. artist_description = foreach artist generate artise_name, description;
+
